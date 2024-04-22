@@ -1,8 +1,6 @@
 package br.com.kamatech.productmanagement.controllers;
 
-import br.com.kamatech.productmanagement.entities.Brand;
 import br.com.kamatech.productmanagement.entities.Category;
-import br.com.kamatech.productmanagement.services.BrandService;
 import br.com.kamatech.productmanagement.services.CategoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
