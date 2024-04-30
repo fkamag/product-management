@@ -9,19 +9,22 @@ public record ProductDto(
   String nane,
   String description,
   ProdutctDetailDto produtctDetail,
-  Brand brand
+  BrandDto brand
 ) {
 
   public static ProductDto fromEntity(Product product) {
     ProdutctDetailDto produtctDetailDto = product.getProductDetail() != null ?
         ProdutctDetailDto.fromEntity(product.getProductDetail()) : null;
 
+    BrandDto brandDto = product.getBrand() != null ?
+        BrandDto.fromEntity(product.getBrand()) : null;
+
     return new ProductDto(
         product.getId(),
         product.getName(),
         product.getDescription(),
         produtctDetailDto,
-        product.getBrand()
+        brandDto
     );
   }
 

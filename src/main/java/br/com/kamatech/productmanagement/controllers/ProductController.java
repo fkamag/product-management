@@ -2,8 +2,10 @@ package br.com.kamatech.productmanagement.controllers;
 
 import br.com.kamatech.productmanagement.controllers.dtos.ProductDto;
 import br.com.kamatech.productmanagement.controllers.dtos.ProdutctDetailDto;
+import br.com.kamatech.productmanagement.entities.Brand;
 import br.com.kamatech.productmanagement.entities.Product;
 import br.com.kamatech.productmanagement.entities.ProductDetail;
+import br.com.kamatech.productmanagement.services.BrandService;
 import br.com.kamatech.productmanagement.services.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class ProductController {
 
   @Autowired
   private ProductService service;
+  @Autowired
+  private BrandService brandService;
 
   @PostMapping
   public ResponseEntity<ProductDto> create(@RequestBody Product product) {
@@ -35,7 +39,7 @@ public class ProductController {
   @GetMapping
   public ResponseEntity<List<ProductDto>> findAll() {
     List<Product> products = service.findAll();
-    List<ProductDto> productDtos =products.stream()
+    List<ProductDto> productDtos = products.stream()
         .map(ProductDto::fromEntity)
         .toList();
     return ResponseEntity.status(HttpStatus.OK).body(productDtos);
@@ -89,5 +93,26 @@ public class ProductController {
     ProductDetail productDetail = service.deleteDetail(productId);
     ProdutctDetailDto produtctDetailDto = ProdutctDetailDto.fromEntity(productDetail);
     return ResponseEntity.status(HttpStatus.OK).body(produtctDetailDto);
+  }
+
+  @PutMapping("/{productId}/brand/{brandId}")
+  public ResponseEntity<ProductDto> updateProductBrand(@PathVariable Long productId,
+      @PathVariable Long brandId) {
+    Product product = service.findById(productId);
+    Brand brand = brandService.findById(brandId);
+    product.setBrand(brand);
+    Product productDb = service.update(product);
+    ProductDto productDto = ProductDto.fromEntity(productDb);
+    return ResponseEntity.status(HttpStatus.OK).body(productDto);
+  }
+
+  @DeleteMapping("/{productId}/brand/{brandId}")
+  public ResponseEntity<ProductDto> deleteProductBrand(@PathVariable Long productId,
+      @PathVariable Long brandId) {
+    Product product = service.findById(productId);
+    product.setBrand(null);
+    Product productDb = service.update(product);
+    ProductDto productDto = ProductDto.fromEntity(productDb);
+    return ResponseEntity.status(HttpStatus.OK).body(productDto);
   }
 }
