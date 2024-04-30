@@ -1,4 +1,4 @@
-package br.com.kamatech.productmanagement.controllers;
+package br.com.kamatech.productmanagement.repositories;
 
 import br.com.kamatech.productmanagement.entities.ProductDetail;
 import org.springframework.data.jpa.repository.JpaRepository;

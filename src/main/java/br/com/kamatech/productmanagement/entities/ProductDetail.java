@@ -9,10 +9,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_product_detail")
+@Table(name = "tb_detail")
 public class ProductDetail {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Integer availableStock;
   private Double unitPrice;

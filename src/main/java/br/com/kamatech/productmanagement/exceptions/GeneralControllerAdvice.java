@@ -23,4 +23,9 @@ public class GeneralControllerAdvice {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
   }
 
+  @ExceptionHandler
+  public ResponseEntity<String> handleProductDetailNotFound(ProductDetailNotFoundException e) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+  }
+
 }

@@ -1,5 +1,6 @@
 package br.com.kamatech.productmanagement.controllers;
 
+import br.com.kamatech.productmanagement.controllers.dtos.BrandDto;
 import br.com.kamatech.productmanagement.entities.Brand;
 import br.com.kamatech.productmanagement.services.BrandService;
 import java.util.List;
@@ -23,27 +24,33 @@ public class BrandController {
   private BrandService service;
 
   @PostMapping
-  public ResponseEntity<Brand> create(@RequestBody Brand brand) {
+  public ResponseEntity<BrandDto> create(@RequestBody Brand brand) {
     Brand brandDb = service.create(brand);
-    return ResponseEntity.status(HttpStatus.CREATED).body(brandDb);
+    BrandDto brandDto = BrandDto.fromEntity(brandDb);
+    return ResponseEntity.status(HttpStatus.CREATED).body(brandDto);
   }
 
   @GetMapping
-  public ResponseEntity<List<Brand>> findAll() {
+  public ResponseEntity<List<BrandDto>> findAll() {
     List<Brand> brands = service.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(brands);
+    List<BrandDto> brandDtos = brands.stream()
+        .map(BrandDto::fromEntity)
+        .toList();
+    return ResponseEntity.status(HttpStatus.OK).body(brandDtos);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Brand> findById(@PathVariable Long id) {
+  public ResponseEntity<BrandDto> findById(@PathVariable Long id) {
     Brand brand = service.findById(id);
-    return ResponseEntity.status(HttpStatus.OK).body(brand);
+    BrandDto brandDto = BrandDto.fromEntity(brand);
+    return ResponseEntity.status(HttpStatus.OK).body(brandDto);
   }
 
   @PutMapping
-  public ResponseEntity<Brand> update(@RequestBody Brand brand) {
+  public ResponseEntity<BrandDto> update(@RequestBody Brand brand) {
     Brand brandDb = service.update(brand);
-    return ResponseEntity.status(HttpStatus.OK).body(brandDb);
+    BrandDto brandDto = BrandDto.fromEntity(brandDb);
+    return ResponseEntity.status(HttpStatus.OK).body(brandDto);
   }
 
   @DeleteMapping("/{id}")

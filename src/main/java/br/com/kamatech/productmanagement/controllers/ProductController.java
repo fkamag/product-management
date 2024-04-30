@@ -1,6 +1,9 @@
 package br.com.kamatech.productmanagement.controllers;
 
+import br.com.kamatech.productmanagement.controllers.dtos.ProductDto;
+import br.com.kamatech.productmanagement.controllers.dtos.ProdutctDetailDto;
 import br.com.kamatech.productmanagement.entities.Product;
+import br.com.kamatech.productmanagement.entities.ProductDetail;
 import br.com.kamatech.productmanagement.services.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +26,33 @@ public class ProductController {
   private ProductService service;
 
   @PostMapping
-  public ResponseEntity<Product> create(@RequestBody Product product) {
+  public ResponseEntity<ProductDto> create(@RequestBody Product product) {
     Product productDb = service.create(product);
-    return ResponseEntity.status(HttpStatus.CREATED).body(productDb);
+    ProductDto productDto = ProductDto.fromEntity(productDb);
+    return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
   }
 
   @GetMapping
-  public ResponseEntity<List<Product>> findAll() {
+  public ResponseEntity<List<ProductDto>> findAll() {
     List<Product> products = service.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(products);
+    List<ProductDto> productDtos =products.stream()
+        .map(ProductDto::fromEntity)
+        .toList();
+    return ResponseEntity.status(HttpStatus.OK).body(productDtos);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Product> findById(@PathVariable Long id) {
+  public ResponseEntity<ProductDto> findById(@PathVariable Long id) {
     Product product = service.findById(id);
-    return ResponseEntity.status(HttpStatus.OK).body(product);
+    ProductDto productDto = ProductDto.fromEntity(product);
+    return ResponseEntity.status(HttpStatus.OK).body(productDto);
   }
 
   @PutMapping
-  public ResponseEntity<Product> update(@RequestBody Product product) {
+  public ResponseEntity<ProductDto> update(@RequestBody Product product) {
     Product productDb = service.update(product);
-    return ResponseEntity.status(HttpStatus.OK).body(productDb);
+    ProductDto productDto = ProductDto.fromEntity(productDb);
+    return ResponseEntity.status(HttpStatus.OK).body(productDto);
   }
 
   @DeleteMapping("/{id}")
@@ -52,4 +61,33 @@ public class ProductController {
     return ResponseEntity.status(HttpStatus.OK).body(message);
   }
 
+  @PostMapping("/{productId}/detail")
+  public ResponseEntity<ProdutctDetailDto> createDetail(@PathVariable Long productId,
+      @RequestBody ProductDetail productDetail) {
+    ProductDetail productDetailDb = service.createDetail(productId, productDetail);
+    ProdutctDetailDto produtctDetailDto = ProdutctDetailDto.fromEntity(productDetailDb);
+    return ResponseEntity.status(HttpStatus.OK).body(produtctDetailDto);
+  }
+
+  @GetMapping("/{productId}/detail")
+  public ResponseEntity<ProdutctDetailDto> getDetail(@PathVariable Long productId) {
+    ProductDetail productDetail = service.getProductDetail(productId);
+    ProdutctDetailDto produtctDetailDto = ProdutctDetailDto.fromEntity(productDetail);
+    return ResponseEntity.status(HttpStatus.OK).body(produtctDetailDto);
+  }
+
+  @PutMapping("/{productId}/detail")
+  public ResponseEntity<ProdutctDetailDto> updateDetail(@PathVariable Long productId,
+      @RequestBody ProductDetail productDetail) {
+    ProductDetail productDetailDb = service.updateDetail(productId, productDetail);
+    ProdutctDetailDto produtctDetailDto = ProdutctDetailDto.fromEntity(productDetailDb);
+    return ResponseEntity.status(HttpStatus.OK).body(produtctDetailDto);
+  }
+
+  @DeleteMapping("/{productId}/detail")
+  public ResponseEntity<ProdutctDetailDto> deleteDetail(@PathVariable Long productId) {
+    ProductDetail productDetail = service.deleteDetail(productId);
+    ProdutctDetailDto produtctDetailDto = ProdutctDetailDto.fromEntity(productDetail);
+    return ResponseEntity.status(HttpStatus.OK).body(produtctDetailDto);
+  }
 }
